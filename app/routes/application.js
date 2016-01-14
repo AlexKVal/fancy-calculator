@@ -12,6 +12,7 @@ export default Ember.Route.extend({
       const ctrl = this.controllerFor('application');
       ctrl.set('isOn', true);
       ctrl.set('level', this.get('levels').objectAt(0));
+      ctrl.set('operator', '+');
     },
 
     turnOff() {
