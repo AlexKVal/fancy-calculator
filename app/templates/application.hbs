@@ -4,7 +4,19 @@
     L
     {{level}}
   {{else if inGameMode}}
-    GAME
+    {{#if isComplete}}
+      <span class="blink">{{correctAnswerCount}}</span>
+    {{else}}
+      {{#if isIncorrect}}
+        EEE
+      {{else}}
+        {{problem.termOne}}
+        {{format-operator problem.operator}}
+        {{problem.termTwo}}
+        =
+        {{answer}}
+      {{/if}}
+    {{/if}}
   {{else}}
     &nbsp;
   {{/if}}
@@ -13,10 +25,16 @@
 <button {{action 'turnOff'}}>OFF</button>
 <button {{action 'turnOn'}}>ON</button>
 <button {{action 'nextLevel'}}>LEVEL</button>
-<button {{action 'playGame'}}>GO</button>
+<button {{action 'go'}}>GO</button>
 <button {{action 'changeSettings'}}>SET</button>
 
 {{change-operator-button operator='+' onClick=(action 'changeOperator')}}
 {{change-operator-button operator='-' onClick=(action 'changeOperator')}}
 {{change-operator-button operator='%' onClick=(action 'changeOperator')}}
 {{change-operator-button operator='*' onClick=(action 'changeOperator')}}
+
+<div>
+  {{#each digits as |digit|}}
+    <button {{action 'pressDigit' digit}}>{{digit}}</button>
+  {{/each}}
+</div>
