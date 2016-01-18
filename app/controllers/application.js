@@ -90,7 +90,7 @@ export default Ember.Controller.extend({
         const newProblem = this.store.createRecord('problem', {
           termOne: Math.floor(Math.random() * 10),
           termTwo: Math.floor(Math.random() * 10),
-          operator: this.get('operator');
+          operator: this.get('operator')
         });
 
         problems.pushObject(newProblem);
@@ -115,11 +115,12 @@ export default Ember.Controller.extend({
 
     changeSettings() {
       if (this.get('inGameMode')) {
-        // TODO: use setProperties()
-        this.set('mode', 'settings');
-        this.set('problems', null);
-        this.set('problemIndex', null);
-        this.set('answer', null);
+        this.setProperties({
+          mode: 'settings',
+          problems: null,
+          problemIndex: null,
+          answer: null
+        });
       }
     },
 
@@ -149,15 +150,20 @@ export default Ember.Controller.extend({
             }
             this.set('tryCount', 0);
 
+            // pause before next question
             Ember.run.later(this, function() {
               this.send('nextProblem');
             }, 500);
           } else { // isAnswerComplete false
+            // show EEE for 0.5 sec
             Ember.run.later(this, function() {
               this.set('isIncorrect', true);
+              // then continue with the next task after 1s pause
               Ember.run.later(this, function() {
-                this.set('isIncorrect', false);
-                this.set('isAnswerLocked', false);
+                this.setProperties({
+                  isIncorrect: false,
+                  isAnswerLocked: false
+                });
 
                 if (this.get('tryCount') === 3) {
                   this.set('answer', this.get('problem.answer'));
