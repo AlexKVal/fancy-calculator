@@ -1,4 +1,5 @@
 import DS from 'ember-data';
+import Ember from 'ember';
 
 export default DS.Model.extend({
   termOne: null,
@@ -10,11 +11,7 @@ export default DS.Model.extend({
     const termTwo = this.get('termTwo');
     const operator = this.get('operator');
 
-    // TODO: use smth like "is a number"
-    const termOneIsDefined = termOne || termOne === 0;
-    const termTwoIsDefined = termTwo || termTwo === 0;
-
-    return termOneIsDefined && termTwoIsDefined && operator;
+    return Ember.isPresent(termOne) && Ember.isPresent(termTwo) && operator;
   }),
 
 
