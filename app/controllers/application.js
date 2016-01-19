@@ -1,5 +1,9 @@
 import Ember from 'ember';
 
+function randomInteger(max) {
+  return Math.floor(Math.random() * max);
+}
+
 export default Ember.Controller.extend({
   levels: [1, 2, 3, 4],
   digits: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
@@ -36,6 +40,21 @@ export default Ember.Controller.extend({
     }
 
     return false;
+  }),
+
+  wholeNumberDivisionTuples: Ember.computed(function() {
+    const tuples = [];
+    const max = 100;
+    for (let numerator = 1; numerator <= max; numerator++) {
+      for (let denominator = 1; denominator <= max; denominator++) {
+        const answer = numerator / denominator;
+        if (answer % denominator === 0) {
+          tuples.pushObject([numerator, denominator]);
+        }
+      }
+    }
+
+    return tuples;
   }),
 
   inSettingsMode: Ember.computed('isOn', 'mode', function() {
@@ -86,11 +105,37 @@ export default Ember.Controller.extend({
       this.set('isDisplayingAnswer', false);
 
       const problems = [];
-      while (problems.length < 3) {
+      const uniqueRandomIndexes = [];
+      const tuples = this.get('wholeNumberDivisionTuples');
+
+      while (uniqueRandomIndexes.length < 4) {
+        const index = randomInteger(tuples.length);
+        if (!uniqueRandomIndexes.contains(index)) {
+          uniqueRandomIndexes.pushObject(index);
+        }
+      }
+
+      while (problems.length < 4) {
+        let termOne;
+        let termTwo;
+
+        const operator = this.get('operator');
+        switch (operator) {
+          case '/':
+            // termOne = tuples[uniqueRandomIndexes[problems.length]][0];
+            // termTwo = tuples[uniqueRandomIndexes[problems.length]][1];
+            [termOne, termTwo] = tuples[uniqueRandomIndexes[problems.length]];
+            break;
+
+          default:
+            termOne = randomInteger(10);
+            termTwo = randomInteger(10);
+        }
+
         const newProblem = this.store.createRecord('problem', {
-          termOne: Math.floor(Math.random() * 10),
-          termTwo: Math.floor(Math.random() * 10),
-          operator: this.get('operator')
+          termOne,
+          termTwo,
+          operator
         });
 
         problems.pushObject(newProblem);
