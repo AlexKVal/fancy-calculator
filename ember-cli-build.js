@@ -2,9 +2,18 @@
 /* global require, module */
 var EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
+var isProduction = EmberApp.env() === 'production';
+
 module.exports = function(defaults) {
   var app = new EmberApp(defaults, {
-    // Add options here
+    mythOptions: {
+      source: './app/styles/app.css',
+      inputFile: 'app.css',
+      browsers: 'last 2 versions',
+      sourcemap: false,
+      compress: isProduction,
+      outputFile: isProduction ? 'fancy-calculator.min.css' : 'fancy-calculator.css'
+    }
   });
 
   // Use `app.import` to add additional libraries to the generated
