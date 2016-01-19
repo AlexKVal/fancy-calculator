@@ -45,6 +45,7 @@ export default Ember.Controller.extend({
   wholeNumberDivisionTuples: Ember.computed(function() {
     const tuples = [];
     const max = 100;
+
     for (let numerator = 1; numerator <= max; numerator++) {
       for (let denominator = 1; denominator <= max; denominator++) {
         const answer = numerator / denominator;
@@ -122,9 +123,12 @@ export default Ember.Controller.extend({
         const operator = this.get('operator');
         switch (operator) {
           case '/':
-            // termOne = tuples[uniqueRandomIndexes[problems.length]][0];
-            // termTwo = tuples[uniqueRandomIndexes[problems.length]][1];
             [termOne, termTwo] = tuples[uniqueRandomIndexes[problems.length]];
+            break;
+
+          case '-':
+            termOne = randomInteger(10 + 1);
+            termTwo = randomInteger(termOne + 1);
             break;
 
           default:
