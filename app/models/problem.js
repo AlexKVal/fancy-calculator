@@ -1,7 +1,6 @@
-import DS from 'ember-data';
 import Ember from 'ember';
 
-export default DS.Model.extend({
+export default Ember.object.extend({
   termOne: null,
   termTwo: null,
   operator: null,
