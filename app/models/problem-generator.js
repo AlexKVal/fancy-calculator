@@ -25,7 +25,7 @@ export default Ember.Object.extend({
           case 4:
             return 11;
         }
-
+        /* falls through */
       case '-':
         return this.get('minAnswer') + this.get('minTermTwo');
 
@@ -40,7 +40,7 @@ export default Ember.Object.extend({
           case 4:
             return 4;
         }
-
+        /* falls through */
       default:
         return 0;
     }
@@ -60,7 +60,7 @@ export default Ember.Object.extend({
           case 4:
             return 51;
         }
-
+        /* falls through */
       case '-':
         switch (level) {
           case 1:
@@ -72,7 +72,7 @@ export default Ember.Object.extend({
           case 4:
             return 99;
         }
-
+        /* falls through */
       case '*':
         switch (level) {
           case 1:
@@ -84,7 +84,7 @@ export default Ember.Object.extend({
           case 4:
             return 19;
         }
-
+        /* falls through */
       case '/':
         return this.get('minTermTwo') * this.get('maxAnswer');
     }
@@ -105,7 +105,7 @@ export default Ember.Object.extend({
           default:
             return 0;
         }
-
+        /* falls through */
       case '/':
         switch (level) {
           case 1:
@@ -117,7 +117,7 @@ export default Ember.Object.extend({
           case 4:
             return 10;
         }
-
+        /* falls through */
       default:
         return 0;
     }
@@ -146,7 +146,7 @@ export default Ember.Object.extend({
           case 4:
             return 60;
         }
-
+        /* falls through */
       case '-':
         switch (level) {
           case 3:
@@ -156,7 +156,7 @@ export default Ember.Object.extend({
           default:
             return 0;
         }
-
+        /* falls through */
       case '*':
         return 1;
 
@@ -171,7 +171,7 @@ export default Ember.Object.extend({
           case 4:
             return 4;
         }
-
+        /* falls through */
       default:
         return 0;
     }
@@ -191,7 +191,7 @@ export default Ember.Object.extend({
           case 4:
             return 99;
         }
-
+        /* falls through */
       case '-':
         switch (level) {
           case 1:
@@ -203,7 +203,7 @@ export default Ember.Object.extend({
           case 4:
             return 80;
         }
-
+        /* falls through */
       case '*':
         switch (level) {
           case 1:
@@ -215,7 +215,7 @@ export default Ember.Object.extend({
           case 4:
             return 99;
         }
-
+        /* falls through */
       case '/':
         switch (level) {
           case 1:
