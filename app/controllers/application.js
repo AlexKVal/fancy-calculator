@@ -1,4 +1,10 @@
 import Ember from 'ember';
+import ProblemGenerator from '../models/problem-generator';
+
+const {
+  computed,
+  isPresent
+} = Ember;
 
 function randomInteger(max) {
   return Math.floor(Math.random() * max);
@@ -8,41 +14,43 @@ export default Ember.Controller.extend({
   levels: [1, 2, 3, 4],
   digits: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
 
-  isRetrying: Ember.computed.gt('tryCount', 0),
+  isRetrying: computed.gt('tryCount', 0),
 
-  problem: Ember.computed('problems', 'problemIndex', function() {
-    return this.get('problems').objectAt(this.get('problemIndex'));
-  }),
-
-  isComplete: Ember.computed('problems', 'problemIndex', function() {
-    if (Ember.isPresent(this.get('problemIndex')) && Ember.isPresent(this.get('problems'))) {
-      return this.get('problemIndex') >= this.get('problems').length;
+  problem: computed('problems', 'problemIndex', function() {
+    const { problems, problemIndex } = this.getProperties('problems', 'problemIndex');
+    if (isPresent(problems) && isPresent(problemIndex)) {
+      return problems.objectAt(problemIndex);
     }
   }),
 
-  isAnswerComplete: Ember.computed('answer', 'problem.answer', function() {
-    const answer = this.get('answer');
-    const problemAnswer = this.get('problem.answer');
+  isComplete: computed('problems', 'problemIndex', function() {
+    const { problems, problemIndex } = this.getProperties('problems', 'problemIndex');
+    if (isPresent(problems) && isPresent(problemIndex)) {
+      return problemIndex >= problems.length;
+    }
+  }),
 
-    if (Ember.isPresent(answer) && Ember.isPresent(problemAnswer)) {
+  isAnswerComplete: computed('answer', 'problem.answer', function() {
+    const { answer, problemAnswer } = this.getProperties('answer', 'problem.answer');
+
+    if (isPresent(answer) && isPresent(problemAnswer)) {
       return answer.toString().length === problemAnswer.toString().length;
     }
 
     return false;
   }),
 
-  isAnswerCorrect: Ember.computed('answer', 'problem.answer', function() {
-    const answer = this.get('answer');
-    const problemAnswer = this.get('problem.answer');
+  isAnswerCorrect: computed('answer', 'problem.answer', function() {
+    const { answer, problemAnswer } = this.getProperties('answer', 'problem.answer');
 
-    if (Ember.isPresent(answer) && Ember.isPresent(problemAnswer)) {
+    if (isPresent(answer) && isPresent(problemAnswer)) {
       return answer === problemAnswer;
     }
 
     return false;
   }),
 
-  wholeNumberDivisionTuples: Ember.computed(function() {
+  wholeNumberDivisionTuples: computed(function() {
     const tuples = [];
     const max = 100;
 
@@ -58,16 +66,18 @@ export default Ember.Controller.extend({
     return tuples;
   }),
 
-  inSettingsMode: Ember.computed('isOn', 'mode', function() {
+  inSettingsMode: computed('isOn', 'mode', function() {
     return this.get('isOn') && this.get('mode') === 'settings';
   }),
 
-  inGameMode: Ember.computed('isOn', 'mode', function() {
+  inGameMode: computed('isOn', 'mode', function() {
     return this.get('isOn') && this.get('mode') === 'game';
   }),
 
   actions: {
     turnOn() {
+      if (this.get('isOn')) return;
+
       this.set('isOn', true);
       this.set('level', this.get('levels').objectAt(0));
       this.set('operator', '+');
@@ -125,24 +135,14 @@ export default Ember.Controller.extend({
           case '/':
             [termOne, termTwo] = tuples[uniqueRandomIndexes[problems.length]];
             break;
-
-          case '-':
-            termOne = randomInteger(10 + 1);
-            termTwo = randomInteger(termOne + 1);
-            break;
-
-          default:
-            termOne = randomInteger(10);
-            termTwo = randomInteger(10);
         }
 
-        const newProblem = this.store.createRecord('problem', {
-          termOne,
-          termTwo,
-          operator
+        const problemGenerator = ProblemGenerator.create({
+          operator,
+          level: this.get('level')
         });
 
-        problems.pushObject(newProblem);
+        problems.pushObject(problemGenerator.generate());
       }
 
       this.set('problems', problems);
@@ -155,7 +155,7 @@ export default Ember.Controller.extend({
       this.set('isIncorrect', false);
       this.set('tryCount', 0);
 
-      if (Ember.isPresent(this.get('problemIndex'))) {
+      if (isPresent(this.get('problemIndex'))) {
         this.incrementProperty('problemIndex');
       } else {
         this.set('problemIndex', 0);
@@ -209,15 +209,14 @@ export default Ember.Controller.extend({
               this.set('isIncorrect', true);
               // then continue with the next task after 1s pause
               Ember.run.later(this, function() {
-                this.setProperties({
-                  isIncorrect: false,
-                  isAnswerLocked: false
-                });
+                this.set('isIncorrect', false);
 
                 if (this.get('tryCount') === 3) {
                   this.set('answer', this.get('problem.answer'));
                   this.toggleProperty('isDisplayingAnswer');
+                  this.set('isAnswerLocked', true);
                 } else {
+                  this.set('isAnswerLocked', false);
                   this.set('answer', null);
                 }
               }, 1000);
