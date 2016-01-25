@@ -8,7 +8,7 @@ export default Ember.Component.extend(EKMixin, {
   onKeyDown: Ember.on(keyDown(), function(event) {
     const keyPressed = getKey(event);
     const buttonValue = this.get('value');
-    if (keyPressed == buttonValue) {
+    if (keyPressed == buttonValue) { // jshint ignore:line
       this.get('onPress')(buttonValue);
     }
   }),

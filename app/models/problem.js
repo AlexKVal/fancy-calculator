@@ -1,24 +1,25 @@
 import Ember from 'ember';
 
-export default Ember.object.extend({
+const {
+  computed,
+  isPresent
+} = Ember;
+
+export default Ember.Object.extend({
   termOne: null,
   termTwo: null,
   operator: null,
 
-  isEvaluable: Ember.computed('termOne', 'termTwo', 'operator', function() {
-    const termOne = this.get('termOne');
-    const termTwo = this.get('termTwo');
-    const operator = this.get('operator');
+  isEvaluable: computed('termOne', 'termTwo', 'operator', function() {
+    const { termOne, termTwo, operator } = this.getProperties('termOne', 'termTwo', 'operator');
 
-    return Ember.isPresent(termOne) && Ember.isPresent(termTwo) && operator;
+    return isPresent(termOne) && isPresent(termTwo) && operator;
   }),
 
 
-  answer: Ember.computed('termOne', 'termTwo', 'operator', function() {
+  answer: computed('termOne', 'termTwo', 'operator', function() {
     if (this.get('isEvaluable')) {
-      const termOne = this.get('termOne');
-      const termTwo = this.get('termTwo');
-      const operator = this.get('operator');
+      const { termOne, termTwo, operator } = this.getProperties('termOne', 'termTwo', 'operator');
 
       return eval(`${termOne} ${operator} ${termTwo}`);
     }

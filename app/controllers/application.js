@@ -76,7 +76,9 @@ export default Ember.Controller.extend({
 
   actions: {
     turnOn() {
-      if (this.get('isOn')) return;
+      if (this.get('isOn')) {
+        return;
+      }
 
       this.set('isOn', true);
       this.set('level', this.get('levels').objectAt(0));
