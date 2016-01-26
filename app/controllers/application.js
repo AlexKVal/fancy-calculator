@@ -218,8 +218,8 @@ export default Ember.Controller.extend({
                   this.toggleProperty('isDisplayingAnswer');
                   this.set('isAnswerLocked', true);
                 } else {
-                  this.set('isAnswerLocked', false);
                   this.set('answer', null);
+                  this.set('isAnswerLocked', false);
                 }
               }, 1000);
             }, 500);
