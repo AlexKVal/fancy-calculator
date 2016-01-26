@@ -100,6 +100,11 @@ button {
   width: 100%;
 }
 
+.d-char {
+  width: 20px;
+  display: inline-block;
+}
+
 #face {
   height: 35%;
 }
@@ -118,9 +123,4 @@ button {
 .button-label {
   margin-bottom: 5px;
   font-size: 1.2em;
-}
-
-.display-character {
-  width: 20px;
-  display: inline-block;
 }
