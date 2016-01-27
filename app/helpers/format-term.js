@@ -4,7 +4,6 @@ const { isPresent } = Ember;
 export function formatTerm(params) {
   const term = params[0];
   const characters = ['',''];
-  let formatted;
 
   if (isPresent(term)) {
     const termCharacters = String(term).split('');

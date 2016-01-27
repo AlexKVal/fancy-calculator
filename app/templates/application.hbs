@@ -1,29 +1,27 @@
 <div id="fancy-calculator">
-  <div class="display">
-    <div class="display-characters">
-      {{#if inSettingsMode}}
-        {{format-operator operator}}
-        L
-        {{level}}
-      {{else if inGameMode}}
-        {{#if isComplete}}
-          <span class="blink">{{correctAnswerCount}}</span>
-        {{else}}
-          {{#if isIncorrect}}
-            EEE
-          {{else}}
-            {{problem.termOne}}
-            {{format-operator problem.operator}}
-            {{problem.termTwo}}
-            =
-            {{answer}}
-          {{/if}}
-        {{/if}}
+
+  {{#if inSettingsMode}}
+    {{render-display operator=operator level=level}}
+  {{else if inGameMode}}
+    {{#if isComplete}}
+      {{render-display answer=correctAnswerCount blink=true}}
+    {{else}}
+      {{#if isIncorrect}}
+        {{render-display isError=true}}
       {{else}}
-        &nbsp;
+        {{render-display
+          operator=problem.operator
+          termOne=problem.termOne
+          termTwo=problem.termTwo
+          isEqualVisible=true
+          answer=answer
+        }}
       {{/if}}
-    </div>
-  </div>
+    {{/if}}
+  {{else}}
+    {{render-display}}
+  {{/if}}
+
   <div id="main">
     <div id="face">
       &nbsp;
